@@ -14,6 +14,9 @@ class Todos(db.Model):
     def __init__(self, task):
         self.task = task
 
+    def new_todo_obj():
+        return Todos("")
+
 class TodosSchema(ma.Schema):
     class Meta:
         fields = ['todo_id', 'task', 'completed']
