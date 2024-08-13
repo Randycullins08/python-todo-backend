@@ -3,7 +3,7 @@ import psycopg2
 from db import *
 import os
 
-from models.todo import Todos
+from models.todo import Todos, todo_schema, todos_schema
 
 flask_host = os.environ.get("FLASK_HOST")
 flask_port = os.environ.get("FLASK_POST")

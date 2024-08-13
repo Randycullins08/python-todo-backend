@@ -1,5 +1,6 @@
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
+import marshmallow as ma
 
 from db import db
 
@@ -12,3 +13,10 @@ class Todos(db.Model):
 
     def __init__(self, task):
         self.task = task
+
+class TodosSchema(ma.Schema):
+    class Meta:
+        fields = ['todo_id', 'task', 'completed']
+
+todo_schema = TodosSchema()
+todos_schema = TodosSchema(many=True)
