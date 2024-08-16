@@ -18,3 +18,20 @@ def add_todo():
         return jsonify({"message" : "unable to create record"}), 400
 
     return jsonify({"message" : "Todo Created", "results" : todo_schema.dump(new_todo)}), 201
+
+def get_todos():
+    todo_data = db.session.query(Todos).all()
+
+    if not todo_data:
+        return jsonify({"message" : "No todos found"}), 404
+    
+    return jsonify({"message" : "Todos found", "results" : todos_schema.dump(todo_data)}),201
+
+def get_todo(todo_id):
+    todo_data = db.session.query(Todos).filter(Todos.todo_id == todo_id).first()
+    print(todo_id)
+
+    if not todo_data:
+        return jsonify({"message" : "No todos found"}), 404
+
+    return jsonify({"message" : "Todo found", "results" : todo_schema.dump(todo_data)}),201
