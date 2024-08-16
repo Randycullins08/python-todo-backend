@@ -1,9 +1,10 @@
-from flask import jsonify
-from models.todo import Todos, todo_schema, todos_schema
-from db import *
-from util import populate_object
+from flask import request, jsonify
 
-def create_todo():
+from models.todo import Todos, todo_schema, todos_schema
+from util.reflection import populate_object
+from db import db, query
+
+def add_todo():
     post_data = request.form if request.form else request.get_json()
 
     new_todo = Todos.new_todo_obj()

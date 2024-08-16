@@ -1,10 +1,11 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.dialects.postgresql import UUID
 
 __all__ = ('db', 'init_db')
 
 db = SQLAlchemy()
+
+query = db.session.query
 
 def init_db(app=None, db=None):
     if isinstance(app, Flask) and isinstance(db, SQLAlchemy):
