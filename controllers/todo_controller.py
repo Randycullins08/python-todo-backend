@@ -1,6 +1,7 @@
 from flask import request, jsonify
 
 from models.todo import Todos, todo_schema, todos_schema
+from util.helper_functions import dynamic_query
 from util.reflection import populate_object
 from db import db, query
 
@@ -28,7 +29,7 @@ def get_todos():
     return jsonify({"message" : "Todos found", "results" : todos_schema.dump(todo_data)}),201
 
 def get_todo(todo_id):
-    todo_data = db.session.query(Todos).filter(Todos.todo_id == todo_id).first()
+    todo_data = dynamic_query(Todos, "todo_id", todo_id)
 
     if not todo_data:
         return jsonify({"message" : "No todos found"}), 404
@@ -36,7 +37,7 @@ def get_todo(todo_id):
     return jsonify({"message" : "Todo found", "results" : todo_schema.dump(todo_data)}),201
 
 def update_todo(todo_id):
-    todo_data = db.session.query(Todos).filter(Todos.todo_id == todo_id).first()
+    todo_data = dynamic_query(Todos, 'todo_id', todo_id)
     post_data = request.form if request.form else request.get_json()
 
     populate_object(todo_data, post_data)
@@ -47,6 +48,16 @@ def update_todo(todo_id):
         db.session.rollback()
         return jsonify({"message" : "Unable to update todo"}), 400
 
-    return jsonify({"message" : "Todo updated", "result" : todo_schema.dump(todo_data)})
+    return jsonify({"message" : "Todo updated", "result" : todo_schema.dump(todo_data)}),201
 
-    
+def delete_todo(todo_id):
+    todo_data = dynamic_query(Todos, 'todo_id', todo_id)
+
+    try:
+        db.session.delete(todo_data)
+        db.session.commit()
+    except:
+        db.session.rollback()
+        return jsonify({"message" : "Unable to delete todo"}),400
+
+    return jsonify({"message" : "Todo deleted"}),201
