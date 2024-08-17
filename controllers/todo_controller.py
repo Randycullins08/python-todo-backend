@@ -29,9 +29,24 @@ def get_todos():
 
 def get_todo(todo_id):
     todo_data = db.session.query(Todos).filter(Todos.todo_id == todo_id).first()
-    print(todo_id)
 
     if not todo_data:
         return jsonify({"message" : "No todos found"}), 404
 
     return jsonify({"message" : "Todo found", "results" : todo_schema.dump(todo_data)}),201
+
+def update_todo(todo_id):
+    todo_data = db.session.query(Todos).filter(Todos.todo_id == todo_id).first()
+    post_data = request.form if request.form else request.get_json()
+
+    populate_object(todo_data, post_data)
+
+    try:
+        db.session.commit()
+    except:
+        db.session.rollback()
+        return jsonify({"message" : "Unable to update todo"}), 400
+
+    return jsonify({"message" : "Todo updated", "result" : todo_schema.dump(todo_data)})
+
+    

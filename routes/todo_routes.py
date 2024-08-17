@@ -15,3 +15,7 @@ def get_todos():
 @todos.route('/todo/<todo_id>', methods=['GET'])
 def get_one_todo(todo_id):
     return todo_controller.get_todo(todo_id)
+
+@todos.route('/todo/<todo_id>', methods=['PUT'])
+def update_todo(todo_id):
+    return todo_controller.update_todo(todo_id)
