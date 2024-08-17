@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_marshmallow import Marshmallow
+from flask_cors import CORS
 import psycopg2
 
 from db import *
@@ -20,6 +21,7 @@ database_name = os.environ.get("DATABASE_NAME")
 
 app = Flask(__name__)
 register_blueprint(app)
+CORS(app)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = f"{database_scheme}{database_user}@{database_address}:{database_port}/{database_name}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
