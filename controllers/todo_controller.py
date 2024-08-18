@@ -6,10 +6,14 @@ from util.reflection import populate_object
 from db import db, query
 
 def add_todo():
-    post_data = request.form if request.form else request.get_json()
+    post_data = request.get_json()
+
+    print(post_data)
 
     new_todo = Todos.new_todo_obj()
     populate_object(new_todo, post_data)
+
+    print("task", new_todo.task)
 
     try:
         db.session.add(new_todo)
@@ -22,9 +26,6 @@ def add_todo():
 
 def get_todos():
     todo_data = db.session.query(Todos).all()
-
-    if not todo_data:
-        return jsonify({"message" : "No todos found"}), 404
     
     return jsonify({"message" : "Todos found", "results" : todos_schema.dump(todo_data)}),201
 
@@ -53,6 +54,9 @@ def update_todo(todo_id):
 def delete_todo(todo_id):
     todo_data = dynamic_query(Todos, 'todo_id', todo_id)
 
+    if not todo_data:
+        return jsonify({"message" : "Todo not found"}),404
+
     try:
         db.session.delete(todo_data)
         db.session.commit()
@@ -60,4 +64,4 @@ def delete_todo(todo_id):
         db.session.rollback()
         return jsonify({"message" : "Unable to delete todo"}),400
 
-    return jsonify({"message" : "Todo deleted"}),201
+    return jsonify({"message" : "Todo deleted"}),200
