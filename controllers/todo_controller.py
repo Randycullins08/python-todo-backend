@@ -13,8 +13,6 @@ def add_todo():
     new_todo = Todos.new_todo_obj()
     populate_object(new_todo, post_data)
 
-    print("task", new_todo.task)
-
     try:
         db.session.add(new_todo)
         db.session.commit()
