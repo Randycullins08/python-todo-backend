@@ -8,8 +8,6 @@ from db import db, query
 def add_todo():
     post_data = request.get_json()
 
-    print(post_data)
-
     new_todo = Todos.new_todo_obj()
     populate_object(new_todo, post_data)
 
