@@ -23,3 +23,7 @@ def update_todo(todo_id):
 @todos.route('/todo/<todo_id>', methods=['DELETE'])
 def delete_todo(todo_id):
     return todo_controller.delete_todo(todo_id)
+
+@todos.route('/todos/order', methods=['POST'])
+def update_todo_order():
+    return todo_controller.update_todo_order()

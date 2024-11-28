@@ -61,3 +61,15 @@ def delete_todo(todo_id):
         return jsonify({"message" : "Unable to delete todo"}),400
 
     return jsonify({"message" : "Todo deleted"}),200
+
+def update_todo_order():
+    post_data = request.get_json()
+
+    todo_data = db.session.query(Todos).all()
+
+    new_order = post_data.get("newOrder", [])
+
+    todo_data = new_order
+
+    return jsonify({"message" : "Order Updated Successfully", "results" : todo_schema.dump(todo_data)}),201
+
